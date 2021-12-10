@@ -1,4 +1,7 @@
 # Data-Engineering-Cheat-Sheet
+
+[![hackmd-github-sync-badge](https://hackmd.io/xQc-EfsyQkyd5Lt1LDxkFw/badge)](https://hackmd.io/xQc-EfsyQkyd5Lt1LDxkFw)
+
 Cheat Sheet for working with Data as a Data Engineer.
 
 ## Table of Contents
