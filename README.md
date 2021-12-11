@@ -16,7 +16,7 @@ Cheat Sheet for working with Data as a Data Engineer.
 
 A struct string has a format as "struct<...array<>>" which can be found in AWS Glue schema or avro schema. 
 
-```python=
+```python
 def struct_to_json(struct):
     """
     Expands embedded struct strings to Python dictionaries
@@ -64,7 +64,7 @@ def struct_to_json(struct):
 #### 2. Flatten a nested dict:
 Sometimes we need to flatten a nested dict in order to iterate all fields at all levels with 1 loop.
 
-```python=
+```python
 def flatten(dictionary, parent_key=False, separator='.'):
     """
     Turn a nested dictionary into a flattened dictionary
@@ -89,7 +89,7 @@ def flatten(dictionary, parent_key=False, separator='.'):
 #### 3. Nest a flattened dict:
 Well, sometimes we also need to nest a dict from a flattened one.
 
-```python=
+```python
 def make_nested_dict(iterable, final):
     """Make nested dictionary path with a final attribute"""
 
@@ -140,7 +140,7 @@ def nest_flattened_dict(flat_dict, sep="."):
     return nested_dict
 ```
 #### 5. Get a value(dict, list, object) from a nested field of a dict:
-```python=
+```python
 def get_nested_value_dict(nested_dict: dict, path: list):
     """
     Get a nested value
@@ -159,7 +159,7 @@ def get_nested_value_dict(nested_dict: dict, path: list):
     return None
 ```
 #### 6. Set a value for a nested field of a dict:
-```python=
+```python
 def set_nested_value_dict(nested_dict: dict, path: list, value):
     if len(path) == 2 and isinstance(nested_dict, dict) and path[1] == "0" and isinstance(value, list):
         nested_dict[path[0]] = value
