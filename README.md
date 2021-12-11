@@ -6,7 +6,17 @@ Cheat Sheet for working with Data as a Data Engineer.
 
 ## Table of Contents
 
-[TOC]
+- [Data-Engineering-Cheat-Sheet](#data-engineering-cheat-sheet)
+  * [Working with nested data structure](#working-with-nested-data-structure)
+    + [Python](#python)
+      - [1. Convert a "Struct" string to json (python dict)](#1-convert-a--struct--string-to-json--python-dict-)
+      - [2. Flatten a nested dict:](#2-flatten-a-nested-dict-)
+      - [3. Nest a flattened dict:](#3-nest-a-flattened-dict-)
+      - [5. Get a value(dict, list, object) from a nested field of a dict:](#5-get-a-value-dict--list--object--from-a-nested-field-of-a-dict-)
+      - [6. Set a value for a nested field of a dict:](#6-set-a-value-for-a-nested-field-of-a-dict-)
+- [Author](#author)
+- [Links](#links)
+- [License](#license)
 
 ## Working with nested data structure
 
@@ -172,17 +182,17 @@ def set_nested_value_dict(nested_dict: dict, path: list, value):
         set_nested_value_dict(nested_dict[path[0]], path[1:], value)
     return nested_dict
 ```
-## Author
+# Author
 
 - [@doanhat](https://github.com/doanhat)
 - And of course **StackOverflow**
 
-## Links
+# Links
 
 [![linkedin](https://img.shields.io/badge/linkedin-0A66C2?style=for-the-badge&logo=linkedin&logoColor=white)](https://www.linkedin.com/in/minhdoan272/)
 [![facebook](https://img.shields.io/badge/Facebook-1877F2?style=for-the-badge&logo=facebook&logoColor=white)](https://www.facebook.com/dnminhhhhh/)
 [![gmail](https://img.shields.io/badge/Gmail-D14836?style=for-the-badge&logo=gmail&logoColor=white)](nhatminhdoan2702@gmail.com)
 
-## License
+# License
 
 [![mit](https://img.shields.io/badge/License-MIT-blue.svg)](https://choosealicense.com/licenses/mit/)
