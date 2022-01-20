@@ -6,17 +6,7 @@ Cheat Sheet for working with Data as a Data Engineer.
 
 ## Table of Contents
 
-- [Data-Engineering-Cheat-Sheet](#data-engineering-cheat-sheet)
-  * [Working with nested data structure](#working-with-nested-data-structure)
-    + [Python](#python)
-      - [1. Convert a "Struct" string to json (python dict)](#1-convert-a--struct--string-to-json--python-dict-)
-      - [2. Flatten a nested dict:](#2-flatten-a-nested-dict-)
-      - [3. Nest a flattened dict:](#3-nest-a-flattened-dict-)
-      - [5. Get a value(dict, list, object) from a nested field of a dict:](#5-get-a-value-dict--list--object--from-a-nested-field-of-a-dict-)
-      - [6. Set a value for a nested field of a dict:](#6-set-a-value-for-a-nested-field-of-a-dict-)
-- [Author](#author)
-- [Links](#links)
-- [License](#license)
+[TOC]
 
 ## Working with nested data structure
 
@@ -26,7 +16,7 @@ Cheat Sheet for working with Data as a Data Engineer.
 
 A struct string has a format as "struct<...array<>>" which can be found in AWS Glue schema or avro schema. 
 
-```python
+```python=
 def struct_to_json(struct):
     """
     Expands embedded struct strings to Python dictionaries
@@ -74,7 +64,7 @@ def struct_to_json(struct):
 #### 2. Flatten a nested dict:
 Sometimes we need to flatten a nested dict in order to iterate all fields at all levels with 1 loop.
 
-```python
+```python=
 def flatten(dictionary, parent_key=False, separator='.'):
     """
     Turn a nested dictionary into a flattened dictionary
@@ -99,7 +89,7 @@ def flatten(dictionary, parent_key=False, separator='.'):
 #### 3. Nest a flattened dict:
 Well, sometimes we also need to nest a dict from a flattened one.
 
-```python
+```python=
 def make_nested_dict(iterable, final):
     """Make nested dictionary path with a final attribute"""
 
@@ -150,7 +140,7 @@ def nest_flattened_dict(flat_dict, sep="."):
     return nested_dict
 ```
 #### 5. Get a value(dict, list, object) from a nested field of a dict:
-```python
+```python=
 def get_nested_value_dict(nested_dict: dict, path: list):
     """
     Get a nested value
@@ -169,7 +159,7 @@ def get_nested_value_dict(nested_dict: dict, path: list):
     return None
 ```
 #### 6. Set a value for a nested field of a dict:
-```python
+```python=
 def set_nested_value_dict(nested_dict: dict, path: list, value):
     if len(path) == 2 and isinstance(nested_dict, dict) and path[1] == "0" and isinstance(value, list):
         nested_dict[path[0]] = value
@@ -182,17 +172,25 @@ def set_nested_value_dict(nested_dict: dict, path: list, value):
         set_nested_value_dict(nested_dict[path[0]], path[1:], value)
     return nested_dict
 ```
-# Author
+
+## Map, Filter and Reduce
+### Python
+#### Multiple filters:
+```python=
+filters = [lambda x: condtion_function_1(x), lambda x: condtion_function_2(x)]
+results = list(filter(lambda x: all([f(x) for f in filters]), target_list))
+```
+## Author
 
 - [@doanhat](https://github.com/doanhat)
 - And of course **StackOverflow**
 
-# Links
+## Links
 
 [![linkedin](https://img.shields.io/badge/linkedin-0A66C2?style=for-the-badge&logo=linkedin&logoColor=white)](https://www.linkedin.com/in/minhdoan272/)
 [![facebook](https://img.shields.io/badge/Facebook-1877F2?style=for-the-badge&logo=facebook&logoColor=white)](https://www.facebook.com/dnminhhhhh/)
 [![gmail](https://img.shields.io/badge/Gmail-D14836?style=for-the-badge&logo=gmail&logoColor=white)](nhatminhdoan2702@gmail.com)
 
-# License
+## License
 
 [![mit](https://img.shields.io/badge/License-MIT-blue.svg)](https://choosealicense.com/licenses/mit/)
