@@ -8,9 +8,8 @@ Cheat Sheet for working with Data as a Data Engineer.
 
 [TOC]
 
-## Working with nested data structure
-
-### Python
+## Python
+### Working with nested data structure
 
 #### 1. Convert a "Struct" string to json (python dict)
 
@@ -139,7 +138,7 @@ def nest_flattened_dict(flat_dict, sep="."):
         nested_dict = merge_nested_dicts(nested_dict, nested_path)
     return nested_dict
 ```
-#### 5. Get a value(dict, list, object) from a nested field of a dict:
+#### 4. Get a value(dict, list, object) from a nested field of a dict:
 ```python=
 def get_nested_value_dict(nested_dict: dict, path: list):
     """
@@ -158,7 +157,7 @@ def get_nested_value_dict(nested_dict: dict, path: list):
         return get_nested_value_dict(nested_dict[path[0]], path[1:])
     return None
 ```
-#### 6. Set a value for a nested field of a dict:
+#### 5. Set a value for a nested field of a dict:
 ```python=
 def set_nested_value_dict(nested_dict: dict, path: list, value):
     if len(path) == 2 and isinstance(nested_dict, dict) and path[1] == "0" and isinstance(value, list):
@@ -173,12 +172,97 @@ def set_nested_value_dict(nested_dict: dict, path: list, value):
     return nested_dict
 ```
 
-## Map, Filter and Reduce
-### Python
+#### 6. Load a `configuration.yml` file:
+```python=
+import json
+import os
+
+import yaml
+
+__all__ = ["load_config", "load_yaml_config"]
+
+
+def load_config(config_file='/configuration.yaml'):
+    dir_path = os.path.dirname(os.path.realpath(__file__))
+    loaded_config = load_yaml_config(dir_path + config_file)
+    return loaded_config
+
+
+def yaml_join(loader, node):
+    """Define custom tag handler."""
+    seq = loader.construct_sequence(node)
+    return ''.join([str(i) for i in seq])
+
+
+yaml.add_constructor('!join', yaml_join)
+
+
+def load_yaml_config(input_file):
+    """Input_file is either a text or byte string giving the name.
+
+    (and the path if the file isn't in the current working directory)
+    :param input_file: input file
+    :return: loaded configuration
+    """
+    with open(input_file, 'r') as configuration_file:
+        loaded_configuration = yaml.load(configuration_file, Loader=yaml.FullLoader)
+        return loaded_configuration
+
+```
+
+### Map, Filter and Reduce
+
 #### Multiple filters:
 ```python=
 filters = [lambda x: condtion_function_1(x), lambda x: condtion_function_2(x)]
 results = list(filter(lambda x: all([f(x) for f in filters]), target_list))
+```
+
+## Apache Airflow
+### Script to find failed DAGS:
+```python=
+def get_latest_errors(hour_last_success):  # noqa: D401
+    """Returns a list of list containing the errors' details in the latest time range.
+
+    List format is [ project name, hour of dag failure, failed task,
+    url to detailed log, hour of dag failure in local time, dag id].
+    """
+
+    bag = DagBag()
+    list_dags_ids = list(bag.dags.keys())  # Gets the list of dags ids
+
+    list_latest_dags_on_failure = []
+
+    for dag_id in list_dags_ids:
+        dag_runs = DagRun.find(dag_id=dag_id, state='failed')  # Gets the failed dag runs from the corresponding dag_id
+        filtered_dag_runs = apply_filter(dag_runs, hour_last_success)
+        for dag_run in filtered_dag_runs:
+
+            failed_project = find_project_name_from_dag_id(dag_id)
+            hour_of_failure_utc = dag_run.start_date.strftime("%d %b à %Hh%M")
+
+            if len(dag_run.get_task_instances(state='failed')) > 0:
+                failed_task_instance = dag_run.get_task_instances(state='failed')[0]
+
+                failed_task = failed_task_instance.task_id
+                link_to_detailed_log = failed_task_instance.log_url
+
+            else:
+                failed_task = "None"
+                link_to_detailed_log = f"{airflow_url}/"
+
+            hour_of_failure_local = convert_datetime_utc_to_local(dag_run.start_date).strftime("%d %b à %Hh%M")
+            dag_id = dag_id
+
+            list_latest_dags_on_failure.append(
+                [failed_project, hour_of_failure_utc, failed_task, link_to_detailed_log, hour_of_failure_local, dag_id]
+            )
+
+    # sorting list_latest_dags_on_failure on x[0] (project name), x[1] (date) and x[1][-5:-3] (hour)
+    list_latest_dags_on_failure.sort(key=lambda x: (x[0], x[1], x[1][-5:-3]))
+
+    return list_latest_dags_on_failure
+
 ```
 ## Author
 
